@@ -1,1 +1,3 @@
-# scienceio
+# ScienceIO NodeJS SDK
+
+

@@ -1,0 +1,32 @@
+{
+  "name": "scienceio",
+  "version": "1.0.0",
+  "description": "SDK to use ScienceIO in NodeJS. Includes types for out-of-the-box typescript support",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hobblecapital/scienceio.git"
+  },
+  "keywords": [
+    "scienceio"
+  ],
+  "author": "hobbleabbas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hobblecapital/scienceio/issues"
+  },
+  "homepage": "https://github.com/hobblecapital/scienceio#readme",
+  "dependencies": {
+    "@types/node": "^18.11.14",
+    "axios": "^1.2.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.4"
+  },
+  "files": ["lib/**/*"]
+}
