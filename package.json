@@ -23,10 +23,13 @@
   "homepage": "https://github.com/hobblecapital/scienceio#readme",
   "dependencies": {
     "@types/node": "^18.11.14",
-    "axios": "^1.2.1"
+    "axios": "^1.2.1",
+    "dotenv": "^16.0.3"
   },
   "devDependencies": {
     "typescript": "^4.9.4"
   },
-  "files": ["lib/**/*"]
+  "files": [
+    "lib/**/*"
+  ]
 }

@@ -21,3 +21,7 @@ async function main() {
 main()
 
 ```
+
+### How to run this
+
+To get started, clone this folder. Then, create a `.env` file (you can use the `.env.example` file as a template). Because this hasn't yet been published to the npm registry, check out `src/example.ts` to see how you can get started right away. The package is really small, you could also simply paste in the `/src/index.ts` or `/lib/index.js` file straight away.
