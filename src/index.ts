@@ -8,6 +8,7 @@ const config = {
     DEFAULT_TIMEOUT: 1200,
     MAX_POLL_DURATION_SEC: 300,
     POLL_SLEEP_DURATION_SEC: 2,
+    MAX_CHARACTERS: 10000
 }
 
 enum scienceio_inference_status {
@@ -25,7 +26,8 @@ export interface ScienceIOResponse {
     request_id: string,
     text: string | null,
     inference_status: scienceio_inference_status,
-    message: string | null,
+    message?: string | null,
+    spans?: any | null,
     model_type: scienceio_model_type
 }
 
@@ -143,6 +145,45 @@ export class ScienceIO {
 
     async annotate(text: string) {
         /**
+         * Process text into MAX_CHARACTER segments, and then request those
+         */
+        if (text.length < 1) { return new ScienceIOError("Must pass at least one character to the API"); }
+        
+        let chunks = []
+        
+        while (text.length > 0) {
+            let spliced_text = text.slice(0, config.MAX_CHARACTERS)
+            let last_char = spliced_text[spliced_text.length - 1]
+            let next_char = text[spliced_text.length]
+            
+            if (last_char != " " && next_char != " " && next_char != undefined) {
+                // If the last character was a character, and so is the next, you're in the middle of a word
+                // We also make sure to check that next_char is not undefined, so that we dont accidentally trunucate the end of the input
+                
+                // In this case, find the last whitespace, and stop the chunk there
+                spliced_text = spliced_text.slice(0, spliced_text.lastIndexOf(' ') + 1)
+                chunks.push(spliced_text)
+                text = text.slice(spliced_text.length);
+            } else {
+                chunks.push(spliced_text)
+                text = text.slice(config.MAX_CHARACTERS);
+            }
+            
+        }
+
+        let requests = []
+
+        for (const chunk of chunks) {
+            requests.push(this._annotate_request(chunk))
+        }
+
+        const responses = await Promise.all(requests)
+
+        return responses
+    }
+
+    private async _annotate_request(text: string) {
+        /**
          * Annotate text
          * Args:
          *    text: Text to annotate    
@@ -174,7 +215,7 @@ export class ScienceIO {
             request_id: request_id,
             text: response.text,
             inference_status: scienceio_inference_status.COMPLETED,
-            message: response.spans,
+            spans: response.spans,
             model_type: scienceio_model_type.STRUCTURE
         }
         
